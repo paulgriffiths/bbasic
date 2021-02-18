@@ -1,0 +1,178 @@
+10 REM ==============================================================
+20 REM String manipulation test suite
+30 REM ==============================================================
+40 trip_error=1000000
+50 GOSUB 2000
+60 GOSUB 3000
+70 GOSUB 4000
+80 GOSUB 5000
+90 GOSUB 6000
+100 GOSUB 7000
+110 GOSUB 8000
+120 GOSUB 9000
+130 GOSUB 10000
+
+1000 PRINT "End of tests"
+1010 END
+
+2000 REM   ============================================================
+2010 PRINT "1. LEN function"
+2020 REM   ============================================================
+2030 IF LEN("")<>0 GOTO trip_error
+2040 IF LEN("a")<>1 GOTO trip_error
+2050 IF LEN("a string")<>8 GOTO trip_error
+2060 RETURN
+
+3000 REM   ============================================================
+3010 PRINT "2. LEFT$ function"
+3020 REM   ============================================================
+3040 IF LEFT$("hello, world!", 0)<>"" GOTO trip_error
+3050 IF LEFT$("hello, world!", 3.14159)<>"hel" GOTO trip_error
+3060 IF LEFT$("hello, world!", 5)<>"hello" GOTO trip_error
+3070 IF LEFT$("hello, world!", 12)<>"hello, world" GOTO trip_error
+3080 IF LEFT$("hello, world!", 13)<>"hello, world!" GOTO trip_error
+3090 IF LEFT$("hello, world!", 14)<>"hello, world!" GOTO trip_error
+3100 IF LEFT$("hello, world!", 999999)<>"hello, world!" GOTO trip_error
+3110 IF LEFT$("hello, world!", -1)<>"hello, world!" GOTO trip_error
+3120 RETURN
+
+4000 REM   ============================================================
+4010 PRINT "3. RIGHT$ function"
+4020 REM   ============================================================
+4040 IF RIGHT$("hello, world!", 0)<>"" GOTO trip_error
+4050 IF RIGHT$("hello, world!", 3.14159)<>"ld!" GOTO trip_error
+4060 IF RIGHT$("hello, world!", 6)<>"world!" GOTO trip_error
+4070 IF RIGHT$("hello, world!", 12)<>"ello, world!" GOTO trip_error
+4080 IF RIGHT$("hello, world!", 13)<>"hello, world!" GOTO trip_error
+4090 IF RIGHT$("hello, world!", 14)<>"hello, world!" GOTO trip_error
+4100 IF RIGHT$("hello, world!", 999999)<>"hello, world!" GOTO trip_error
+4110 IF RIGHT$("hello, world!", -1)<>"hello, world!" GOTO trip_error
+4120 RETURN
+
+5000 REM   ============================================================
+5010 PRINT "4. MID$ function"
+5020 REM   ============================================================
+5040 IF MID$("hello, world!", 0)<>"hello, world!" GOTO trip_error
+5050 IF MID$("hello, world!", 1)<>"hello, world!" GOTO trip_error
+5060 IF MID$("hello, world!", 2)<>"ello, world!" GOTO trip_error
+5070 IF MID$("hello, world!", 8)<>"world!" GOTO trip_error
+5080 IF MID$("hello, world!", 12)<>"d!" GOTO trip_error
+5090 IF MID$("hello, world!", 13)<>"!" GOTO trip_error
+5100 IF MID$("hello, world!", 14)<>"" GOTO trip_error
+5110 IF MID$("hello, world!", -1)<>"" GOTO trip_error
+5120 IF MID$("hello, world!", 0, 13)<>"hello, world!" GOTO trip_error
+5130 IF MID$("hello, world!", 1, 13)<>"hello, world!" GOTO trip_error
+5140 IF MID$("hello, world!", 2, 12)<>"ello, world!" GOTO trip_error
+5150 IF MID$("hello, world!", 8, 6)<>"world!" GOTO trip_error
+5160 IF MID$("hello, world!", 12, 2)<>"d!" GOTO trip_error
+5170 IF MID$("hello, world!", 13, 1)<>"!" GOTO trip_error
+5180 IF MID$("hello, world!", 14, 0)<>"" GOTO trip_error
+5190 IF MID$("hello, world!", -1, 21)<>"" GOTO trip_error
+5200 IF MID$("hello, world!", 0, 21)<>"hello, world!" GOTO trip_error
+5210 IF MID$("hello, world!", 1, 21)<>"hello, world!" GOTO trip_error
+5220 IF MID$("hello, world!", 2, 21)<>"ello, world!" GOTO trip_error
+5230 IF MID$("hello, world!", 8, 21)<>"world!" GOTO trip_error
+5240 IF MID$("hello, world!", 12, 21)<>"d!" GOTO trip_error
+5250 IF MID$("hello, world!", 13, 21)<>"!" GOTO trip_error
+5260 IF MID$("hello, world!", 14, 21)<>"" GOTO trip_error
+5270 IF MID$("hello, world!", -1, 21)<>"" GOTO trip_error
+5280 IF MID$("hello, world!", 0, 7)<>"hello, " GOTO trip_error
+5290 IF MID$("hello, world!", 1, 7)<>"hello, " GOTO trip_error
+5300 IF MID$("hello, world!", 2, 7)<>"ello, w" GOTO trip_error
+5310 IF MID$("hello, world!", 8, 7)<>"world!" GOTO trip_error
+5320 IF MID$("hello, world!", 12, 7)<>"d!" GOTO trip_error
+5330 IF MID$("hello, world!", 13, 7)<>"!" GOTO trip_error
+5340 IF MID$("hello, world!", 14, 7)<>"" GOTO trip_error
+5350 IF MID$("hello, world!", 0, 1)<>"h" GOTO trip_error
+5360 IF MID$("hello, world!", 1, 1)<>"h" GOTO trip_error
+5370 IF MID$("hello, world!", 2, 1)<>"e" GOTO trip_error
+5380 IF MID$("hello, world!", 8, 1)<>"w" GOTO trip_error
+5390 IF MID$("hello, world!", 12, 1)<>"d" GOTO trip_error
+5400 IF MID$("hello, world!", 13, 1)<>"!" GOTO trip_error
+5410 IF MID$("hello, world!", 14, 0)<>"" GOTO trip_error
+5420 IF MID$("hello, world!", 0, 0)<>"" GOTO trip_error
+5430 IF MID$("hello, world!", 1, 0)<>"" GOTO trip_error
+5440 IF MID$("hello, world!", 2, 0)<>"" GOTO trip_error
+5450 IF MID$("hello, world!", 8, 0)<>"" GOTO trip_error
+5460 IF MID$("hello, world!", 12, 0)<>"" GOTO trip_error
+5470 IF MID$("hello, world!", 13, 0)<>"" GOTO trip_error
+5480 IF MID$("hello, world!", 14, 0)<>"" GOTO trip_error
+5490 RETURN
+
+6000 REM   ============================================================
+6010 PRINT "5. INSTR function"
+6020 REM   ============================================================
+6040 IF INSTR("hello, hello, world!", "hello")<>1 GOTO trip_error
+6050 IF INSTR("hello, hello, world!", "world")<>15 GOTO trip_error
+6060 IF INSTR("hello, hello, world!", "blood")<>0 GOTO trip_error
+6070 IF INSTR("hello, hello, world!", "hello", 0)<>1 GOTO trip_error
+6080 IF INSTR("hello, hello, world!", "hello", 1)<>1 GOTO trip_error
+6090 IF INSTR("hello, hello, world!", "hello", 4)<>8 GOTO trip_error
+6100 IF INSTR("hello, hello, world!", "hello", 8)<>8 GOTO trip_error
+6110 IF INSTR("hello, hello, world!", "hello", 9)<>0 GOTO trip_error
+6120 IF INSTR("hello, hello, world!", "hello", 100)<>0 GOTO trip_error
+6130 IF INSTR("hello, hello, world!", "blood", 100)<>0 GOTO trip_error
+6140 IF INSTR("hello, hello, world!", "")<>1 GOTO trip_error
+6150 IF INSTR("", "")<>1 GOTO trip_error
+6160 IF INSTR("hello, hello, world!", "", 100)<>1 GOTO trip_error
+6170 IF INSTR("", "", 0)<>1 GOTO trip_error
+6180 IF INSTR("", "", 1)<>1 GOTO trip_error
+6190 RETURN
+
+7000 REM   ============================================================
+7010 PRINT "6. STRING$ function"
+7020 REM   ============================================================
+7040 IF STRING$(0, "H")<>"" GOTO trip_error
+7050 IF STRING$(1, "H")<>"H" GOTO trip_error
+7060 IF STRING$(2, "H")<>"HH" GOTO trip_error
+7070 IF STRING$(1, "HA")<>"HA" GOTO trip_error
+7080 IF STRING$(2, "HA")<>"HAHA" GOTO trip_error
+7090 IF STRING$(10, "HA")<>"HAHAHAHAHAHAHAHAHAHA" GOTO trip_error
+7100 IF STRING$(258, "HA")<>"HAHA" GOTO trip_error
+7110 RETURN
+
+8000 REM   ============================================================
+8010 PRINT "7. STR$ function"
+8020 REM   ============================================================
+8040 @%=&0107:IF STR$(2.345)<>"      2" GOTO trip_error
+8050 @%=&0207:IF STR$(2.345)<>"    2.3" GOTO trip_error
+8060 @%=&0307:IF STR$(2.345)<>"   2.35" GOTO trip_error
+8070 @%=&0407:IF STR$(2.345)<>"  2.345" GOTO trip_error
+8080 @%=&0507:IF STR$(2.345)<>"  2.345" GOTO trip_error
+8090 @%=&020108:IF STR$(2.345)<>"     2.3" GOTO trip_error
+8100 @%=&020208:IF STR$(2.345)<>"    2.35" GOTO trip_error
+8110 @%=&020308:IF STR$(2.345)<>"   2.345" GOTO trip_error
+8120 @%=&020408:IF STR$(2.345)<>"  2.3450" GOTO trip_error
+8130 @%=&020508:IF STR$(2.345)<>" 2.34500" GOTO trip_error
+8140 @%=&010109:IF STR$(2.345)<>"    2E+00" GOTO trip_error
+8150 RETURN
+
+9000 REM   ============================================================
+9010 PRINT "8. VAL function"
+9020 REM   ============================================================
+9040 IF VAL("42")<>42 GOTO trip_error
+9050 IF VAL("42.34")<>42.34 GOTO trip_error
+9060 IF VAL("-392.1")<>-392.1 GOTO trip_error
+9070 IF VAL("")<>0 GOTO trip_error
+9080 IF VAL("not a string")<>0 GOTO trip_error
+9090 IF VAL("42 with trailing data")<>42 GOTO trip_error
+9100 RETURN
+
+10000 REM   ============================================================
+10010 PRINT "9. ASC and CHR$ functions"
+10020 REM   ============================================================
+10040 IF ASC("A")<>65 GOTO trip_error
+10050 IF ASC("ASCII")<>65 GOTO trip_error
+10060 IF ASC("H")<>72 GOTO trip_error
+10070 IF ASC("Hello")<>72 GOTO trip_error
+10080 IF ASC("")<>-1 GOTO trip_error
+10090 IF CHR$(65)<>"A" GOTO trip_error
+10100 IF CHR$(72)<>"H" GOTO trip_error
+10110 IF ASC(CHR$(65))<>65 GOTO trip_error
+10120 IF ASC(CHR$(72))<>72 GOTO trip_error
+10130 RETURN
+
+1000000 REM ==============================================================
+1000010 REM Deliberate division by zero to fail a test
+1000020 REM ==============================================================
+1000030 PRINT 4/0

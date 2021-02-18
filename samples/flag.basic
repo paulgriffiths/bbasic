@@ -1,0 +1,43 @@
+10 REM FLAG, Prints a stylized flag
+20 REM Copyright (C) 2021 Paul Griffiths.
+30
+40 REM This program is free software; you can redistribute it and/or modify
+50 REM it under the terms of the GNU General Public License as published by
+60 REM the Free Software Foundation; either version 3, or (at your option)
+70 REM any later version.
+80
+90 REM This program is distributed in the hope that it will be useful,
+100 REM but WITHOUT ANY WARRANTY; without even the implied warranty of
+110 REM MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+120 REM GNU General Public License for more details.
+130
+140 REM You should have received a copy of the GNU General Public License
+150 REM along with this program; If not, see <https://www.gnu.org/licenses/>.
+160
+170 star_width%=19
+180 line_width%=46
+190
+200 FOR I=1 TO 13
+210 IF I > 7 GOTO 240 
+220 COLOUR 7:COLOUR 132
+230 IF I MOD 2 PROC_odd_stars ELSE PROC_even_stars
+240 IF I MOD 2 COLOUR 1:COLOUR 129 ELSE COLOUR 7:COLOUR 135
+250 PROC_fill_line
+260 NEXT I
+270 END
+280
+300 DEF PROC_odd_stars
+310 PRINT ;" * ";
+320 REPEAT PRINT ;"  * ";:UNTIL COUNT>=star_width%
+330 ENDPROC
+340
+400 DEF PROC_even_stars
+410 PRINT ;"   ";
+420 REPEAT PRINT ;"*   ";:UNTIL COUNT>=star_width%
+430 ENDPROC
+440
+500 DEF PROC_fill_line
+510 REPEAT PRINT ;"=";:UNTIL COUNT>=line_width%
+520 COLOUR 128
+530 PRINT
+540 ENDPROC

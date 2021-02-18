@@ -1,0 +1,74 @@
+10 REM REACTION, a keypress reaction timer
+20 REM Copyright (C) 2021 Paul Griffiths.
+30
+40 REM This program is free software; you can redistribute it and/or modify
+50 REM it under the terms of the GNU General Public License as published by
+60 REM the Free Software Foundation; either version 3, or (at your option)
+70 REM any later version.
+80
+90 REM This program is distributed in the hope that it will be useful,
+100 REM but WITHOUT ANY WARRANTY; without even the implied warranty of
+110 REM MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+120 REM GNU General Public License for more details.
+130
+140 REM You should have received a copy of the GNU General Public License
+150 REM along with this program; If not, see <https://www.gnu.org/licenses/>.
+160
+170 REM Seed the PRNG
+180 R%=RND(-42)
+190
+200 REM Set output to 2 fixed decimal places
+210 @%=&020209
+229
+230 total_time%=0
+240 tries%=0
+250 errors%=0
+260 misses%=0
+270
+280 PRINT "This program will test your reaction time for pressing a given key."
+290
+300 REPEAT COLOUR 3:PRINT "Get ready..."
+310
+320 REM Choose a random key and delay time between 1 and 5 seconds
+330 key%=FN_random_key
+340 delay%=FN_random_delay
+350
+360 REM Loop until delay has passed
+370 PROC_delay(delay%)
+380
+390 REM Prompt for key
+400 COLOUR 2:PRINT "Press '";CHR$(key%);"' now!":COLOUR 7
+410 start%=TIME
+420 got%=INKEY(500)
+430 taken%=TIME-start%
+440
+450 REM Print result and update record
+460 IF got%=-1 PRINT "Too late!":misses%=misses%+1:GOTO 480
+470 IF got%<>key% PRINT "Wrong key!":errors%=errors%+1:GOTO 480
+480 PRINT "You took ";taken%/100;" seconds."
+490 total_time%=total_time%+taken%
+500 tries%=tries%+1
+510
+520 REM Have another go if requested
+530 PRINT "Press 'q' to quit or any other key to go again"
+540 key$=GET$
+550 UNTIL key$="q" OR key$="Q"
+560
+570 REM Output total statistics
+580 PRINT "You averaged ";(total_time%/tries%)/100;" seconds over ";
+590 @%=&90a
+600 PRINT ;tries%;" tries."
+610 IF misses%>0 PRINT "You missed ";misses%;" times."
+620 IF errors%>0 PRINT "You made ";errors%;" errors."
+630 END
+640
+700 DEF FN_random_key
+710 =ASC("a")+RND(26)-1
+720
+800 DEF FN_random_delay
+810 =RND(400)+100
+820
+900 DEF PROC_delay(delay%)
+910 start%=TIME
+920 REPEAT:UNTIL TIME-start%=delay%
+930 ENDPROC

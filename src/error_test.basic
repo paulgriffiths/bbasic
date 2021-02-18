@@ -1,0 +1,1064 @@
+10 REM ==============================================================
+20 REM Error statements test suite
+30 REM ==============================================================
+40 handler=1000000
+50 check_handler=1001000
+60 trigger_error=1100000
+
+70 REM ==============================================================
+80 REM Error codes
+90 REM ==============================================================
+
+100 ERR_ACCURACY_LOST=23
+110 ERR_ARGUMENTS=31
+120 ERR_ARRAY=14
+130 ERR_BAD_CALL=30
+140 ERR_BAD_DIM=10
+150 ERR_BAD_HEX=28
+160 ERR_BAD_KEY=251
+170 ERR_BAD_MODE=25
+180 ERR_BAD_PROGRAM=0
+190 ERR_BAD_STRING=253
+200 ERR_BLOCK=218
+210 ERR_BYTE=2
+220 ERR_CANT_MATCH_FOR=33
+230 ERR_CHANNEL=222
+240 ERR_DATA=216
+250 ERR_DIM_SPACE=11
+260 ERR_DIVIDE_ZERO=18
+270 ERR_STRING_RANGE=8
+280 ERR_EOF=223
+290 ERR_ESCAPE=17
+300 ERR_EXP_RANGE=24
+310 ERR_FILE=219
+320 ERR_FOR_VARIABLE=34
+330 ERR_HEADER=217
+340 ERR_INDEX=3
+350 ERR_KEY_IN_USE=250
+360 ERR_LOG_RANGE=22
+370 ERR_MISSING_COMMA=5
+380 ERR_MISSING_QUOTE=9
+390 ERR_MISSING_RPAREN=27
+400 ERR_MISSING_HASH=45
+410 ERR_MISTAKE=4
+420 ERR_NEGATIVE_ROOT=21
+430 ERR_NO_FN=7
+440 ERR_NO_FOR=32
+450 ERR_NO_GOSUB=38
+460 ERR_NO_PROC=13
+470 ERR_NO_REPEAT=43
+480 ERR_NO_ROOM=0
+490 ERR_NO_SUCH_FN_PROC=29
+500 ERR_NO_SUCH_LINE=41
+510 ERR_NO_SUCH_VARIABLE=26
+520 ERR_NO_TO=36
+530 ERR_NOT_LOCAL=12
+540 ERR_ON_RANGE=40
+550 ERR_ON_SYNTAX=39
+560 ERR_OUT_OF_DATA=42
+570 ERR_OUT_OF_RANGE=1
+580 ERR_SYNTAX=220
+590 ERR_STRING_TOO_LONG=19
+600 ERR_SUBSCRIPT=15
+610 ERR_SYNTAX_ERROR=16
+620 ERR_TOO_BIG=20
+630 ERR_TOO_MANY_FORS=35
+640 ERR_TOO_MANY_GOSUBS=37
+650 ERR_TOO_MANY_REPEATS=44
+660 ERR_TYPE_MISMATCH=6
+
+
+800 REM ==============================================================
+810 REM NOTE: In the following tests:
+820 REM   - E% is set to 1 before each test, and reset to 0 by
+830 REM     the error handler, so we don't infinitelt repeat the
+840 REM     error when the handler returns
+850 REM   - W% is set to the expected error code before each test
+860 REM     and reset to 0 by the error handler. Verifying that
+870 REM     W% is 0 enables us to verify that the error handler
+880 REM     actually was invoked, and that the test did indeed
+890 REM     generate the expected error.
+900 REM ==============================================================
+
+1000 REM ==============================================================
+1010 REM Assignment tests
+1020 REM ==============================================================
+
+1025 PRINT "1. Assignment tests"
+
+1030 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% LET A%="string"
+1040 GOSUB check_handler
+
+1050 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% LET A%=3.14159
+1060 GOSUB check_handler
+
+1070 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% LET var="string"
+1080 GOSUB check_handler
+
+1090 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% LET var$=42
+1100 GOSUB check_handler
+
+1110 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% LET var$=3.14159
+1120 GOSUB check_handler
+
+1130 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% LET var=foo
+1140 GOSUB check_handler
+
+1150 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% LET tmp$=var$
+1160 GOSUB check_handler
+
+1170 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% LET TIME="string"
+1180 GOSUB check_handler
+
+2000 REM ==============================================================
+2010 REM Arithmetic tests
+2020 REM ==============================================================
+
+2025 PRINT "2. Arithmetic tests"
+
+2030 E%=1:W%=ERR_DIVIDE_ZERO:ON ERROR GOSUB handler:IF E% PRINT 4/0
+2040 GOSUB check_handler
+
+2041 E%=1:W%=ERR_DIVIDE_ZERO:ON ERROR GOSUB handler:IF E% PRINT 4.0/0.0
+2042 GOSUB check_handler
+
+2050 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3+"string"
+2060 GOSUB check_handler
+
+2070 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"+3
+2080 GOSUB check_handler
+
+2090 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3.14159+"string"
+2100 GOSUB check_handler
+
+2110 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"+3.14159
+2120 GOSUB check_handler
+
+2130 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3-"string"
+2140 GOSUB check_handler
+
+2150 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"-3
+2160 GOSUB check_handler
+
+2170 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3.14159-"string"
+2180 GOSUB check_handler
+
+2190 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"-3.14159
+2200 GOSUB check_handler
+
+2210 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3*"string"
+2220 GOSUB check_handler
+
+2230 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"*3
+2240 GOSUB check_handler
+
+2250 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3.14159*"string"
+2260 GOSUB check_handler
+
+2270 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"*3.14159
+2280 GOSUB check_handler
+
+2290 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3/"string"
+2300 GOSUB check_handler
+
+2310 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"/3
+2320 GOSUB check_handler
+
+2330 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3.14159/"string"
+2340 GOSUB check_handler
+
+2350 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"/3.14159
+2360 GOSUB check_handler
+
+2370 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT -"string"
+2380 GOSUB check_handler
+
+2390 E%=1:W%=ERR_LOG_RANGE:ON ERROR GOSUB handler:IF E% PRINT -9^0.5
+2400 GOSUB check_handler
+
+2410 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "a"-"b"
+2420 GOSUB check_handler
+
+2430 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "a"*"b"
+2440 GOSUB check_handler
+
+2450 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "a"/"b"
+2460 GOSUB check_handler
+
+2470 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "a"^"b"
+2480 GOSUB check_handler
+
+2490 E%=1:W%=ERR_DIVIDE_ZERO:ON ERROR GOSUB handler:IF E% PRINT 4 DIV 0
+2500 GOSUB check_handler
+
+2510 E%=1:W%=ERR_DIVIDE_ZERO:ON ERROR GOSUB handler:IF E% PRINT 4 MOD 0
+2520 GOSUB check_handler
+
+2530 E%=1:W%=ERR_DIVIDE_ZERO:ON ERROR GOSUB handler:IF E% PRINT 4.0 DIV 0.0
+2540 GOSUB check_handler
+
+2550 E%=1:W%=ERR_DIVIDE_ZERO:ON ERROR GOSUB handler:IF E% PRINT 4.0 MOD 0.0
+2560 GOSUB check_handler
+
+2570 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3+q
+2580 GOSUB check_handler
+
+2590 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT q+4
+2600 GOSUB check_handler
+
+2610 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT p+q
+2620 GOSUB check_handler
+
+2630 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3-q
+2640 GOSUB check_handler
+
+2650 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT q-4
+2660 GOSUB check_handler
+
+2670 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT p-q
+2680 GOSUB check_handler
+
+2690 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3*q
+2700 GOSUB check_handler
+
+2710 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT q*4
+2720 GOSUB check_handler
+
+2730 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT p*q
+2740 GOSUB check_handler
+
+2750 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3/q
+2760 GOSUB check_handler
+
+2770 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT q/4
+2780 GOSUB check_handler
+
+2790 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT p/q
+2800 GOSUB check_handler
+
+2810 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3^q
+2820 GOSUB check_handler
+
+2830 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT q^4
+2840 GOSUB check_handler
+
+2850 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT p^q
+2860 GOSUB check_handler
+
+2870 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3 DIV q
+2880 GOSUB check_handler
+
+2890 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT q DIV 4
+2900 GOSUB check_handler
+
+2910 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT p DIV q
+2920 GOSUB check_handler
+
+2930 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3 MOD q
+2940 GOSUB check_handler
+
+2950 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT q MOD 4
+2960 GOSUB check_handler
+
+2970 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT p MOD q
+2980 GOSUB check_handler
+
+2981 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT -p
+2982 GOSUB check_handler
+
+3000 REM ==============================================================
+3010 REM Comparison tests
+3020 REM ==============================================================
+
+3025 PRINT "3. Comparison tests"
+
+3030 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3="string"
+3040 GOSUB check_handler
+
+3050 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3.14159="string"
+3060 GOSUB check_handler
+
+3070 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"=3
+3080 GOSUB check_handler
+
+3090 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"=3.14159
+3100 GOSUB check_handler
+
+3110 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3<>"string"
+3120 GOSUB check_handler
+
+3130 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3.14159<>"string"
+3140 GOSUB check_handler
+
+3150 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"<>3
+3160 GOSUB check_handler
+
+3170 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"<>3.14159
+3180 GOSUB check_handler
+
+3190 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3<"string"
+3200 GOSUB check_handler
+
+3210 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3.14159<"string"
+3220 GOSUB check_handler
+
+3230 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"<3
+3240 GOSUB check_handler
+
+3250 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"<3.14159
+3260 GOSUB check_handler
+
+3270 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3<="string"
+3280 GOSUB check_handler
+
+3290 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3.14159<="string"
+3300 GOSUB check_handler
+
+3310 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"<=3
+3320 GOSUB check_handler
+
+3330 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string"<=3.14159
+3340 GOSUB check_handler
+
+3350 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3>"string"
+3360 GOSUB check_handler
+
+3370 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3.14159>"string"
+3380 GOSUB check_handler
+
+3390 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string">3
+3400 GOSUB check_handler
+
+3410 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string">3.14159
+3420 GOSUB check_handler
+
+3430 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3>="string"
+3440 GOSUB check_handler
+
+3450 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT 3.14159>="string"
+3460 GOSUB check_handler
+
+3479 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string">=3
+3480 GOSUB check_handler
+
+3490 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "string">=3.14159
+3500 GOSUB check_handler
+
+3510 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3 = q
+3520 GOSUB check_handler
+
+3530 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s = 4
+3540 GOSUB check_handler
+
+3550 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s = q
+3560 GOSUB check_handler
+
+3570 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3 <> q
+3580 GOSUB check_handler
+
+3590 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s <> 4
+3600 GOSUB check_handler
+
+3610 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s <> q
+3620 GOSUB check_handler
+
+3630 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3 < q
+3640 GOSUB check_handler
+
+3650 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s < 4
+3660 GOSUB check_handler
+
+3670 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s < q
+3680 GOSUB check_handler
+
+3690 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3 <= q
+3700 GOSUB check_handler
+
+3710 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s <= 4
+3720 GOSUB check_handler
+
+3730 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s <= q
+3740 GOSUB check_handler
+
+3750 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3 > q
+3760 GOSUB check_handler
+
+3770 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s > 4
+3780 GOSUB check_handler
+
+3790 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s >= q
+3800 GOSUB check_handler
+
+3810 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3 >= q
+3820 GOSUB check_handler
+
+3830 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s >= 4
+3840 GOSUB check_handler
+
+3850 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s >= q
+3860 GOSUB check_handler
+
+4000 REM ==============================================================
+4010 REM Built-in function tests
+4020 REM ==============================================================
+
+4025 PRINT "4. Built-in function tests"
+
+4030 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT ABS("string")
+4040 GOSUB check_handler
+
+4050 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT ABS(3+"string")
+4060 GOSUB check_handler
+
+4061 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT ABS(q)
+4062 GOSUB check_handler
+
+4070 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT ACS("string")
+4080 GOSUB check_handler
+
+4090 E%=1:W%=ERR_NEGATIVE_ROOT:ON ERROR GOSUB handler:IF E% PRINT ACS(2)
+4100 GOSUB check_handler
+
+4110 E%=1:W%=ERR_NEGATIVE_ROOT:ON ERROR GOSUB handler:IF E% PRINT ACS(-2)
+4120 GOSUB check_handler
+
+4121 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT ACS(q)
+4122 GOSUB check_handler
+
+4130 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT ASN("string")
+4140 GOSUB check_handler
+
+4150 E%=1:W%=ERR_NEGATIVE_ROOT:ON ERROR GOSUB handler:IF E% PRINT ASN(2)
+4160 GOSUB check_handler
+
+4170 E%=1:W%=ERR_NEGATIVE_ROOT:ON ERROR GOSUB handler:IF E% PRINT ASN(-2)
+4180 GOSUB check_handler
+
+4181 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT ASN(q)
+4182 GOSUB check_handler
+
+4190 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT ATN("string")
+4200 GOSUB check_handler
+
+4201 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT ATN(q)
+4202 GOSUB check_handler
+
+4210 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT COS("string")
+4220 GOSUB check_handler
+
+4221 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT COS(q)
+4222 GOSUB check_handler
+
+4230 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT DEG("string")
+4240 GOSUB check_handler
+
+4241 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT DEG(q)
+4242 GOSUB check_handler
+
+4250 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT EXP("string")
+4260 GOSUB check_handler
+
+4261 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT EXP(q)
+4262 GOSUB check_handler
+
+4270 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT INSTR(42, "s", 1)
+4280 GOSUB check_handler
+
+4290 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT INSTR("str", 19, 1)
+4300 GOSUB check_handler
+
+4310 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT INSTR("str", "s", "1")
+4320 GOSUB check_handler
+
+4321 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT INSTR("str", "s", q)
+4322 GOSUB check_handler
+
+4323 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT INSTR("str", q$, 1)
+4324 GOSUB check_handler
+
+4325 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT INSTR(s$, "s", 1)
+4326 GOSUB check_handler
+
+4330 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT INT("string")
+4340 GOSUB check_handler
+
+4341 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT INT(q)
+4342 GOSUB check_handler
+
+4350 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT LEFT$(42, 1)
+4360 GOSUB check_handler
+
+4370 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT LEFT$("str", "1")
+4380 GOSUB check_handler
+
+4381 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT LEFT$("str", q)
+4382 GOSUB check_handler
+
+4383 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT LEFT$(s$, 1)
+4384 GOSUB check_handler
+
+4390 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT LEN(42)
+4400 GOSUB check_handler
+
+4410 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT LEN(3.14159)
+4420 GOSUB check_handler
+
+4421 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT LEN(q)
+4422 GOSUB check_handler
+
+4430 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT LN("string")
+4440 GOSUB check_handler
+
+4441 E%=1:W%=ERR_LOG_RANGE:ON ERROR GOSUB handler:IF E% PRINT LN(0)
+4442 GOSUB check_handler
+
+4443 E%=1:W%=ERR_LOG_RANGE:ON ERROR GOSUB handler:IF E% PRINT LN(-3)
+4444 GOSUB check_handler
+
+4445 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT LN(q)
+4446 GOSUB check_handler
+
+4450 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT LOG("string")
+4460 GOSUB check_handler
+
+4461 E%=1:W%=ERR_LOG_RANGE:ON ERROR GOSUB handler:IF E% PRINT LOG(0)
+4462 GOSUB check_handler
+
+4463 E%=1:W%=ERR_LOG_RANGE:ON ERROR GOSUB handler:IF E% PRINT LOG(-3)
+4464 GOSUB check_handler
+
+4465 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT LOG(q)
+4466 GOSUB check_handler
+
+4470 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT MID$(42, 2, 4)
+4480 GOSUB check_handler
+
+4490 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT MID$("str", "2", 4)
+4500 GOSUB check_handler
+
+4510 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT MID$("str", 2, "4")
+4520 GOSUB check_handler
+
+4521 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT MID$("str", 2, q)
+4522 GOSUB check_handler
+
+4523 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT MID$("str", s, 4)
+4524 GOSUB check_handler
+
+4525 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT MID$(s$, 2, 4)
+4526 GOSUB check_handler
+
+4530 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT RAD("string")
+4540 GOSUB check_handler
+
+4541 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT RAD(q)
+4542 GOSUB check_handler
+
+4550 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT RIGHT$(42, 1)
+4560 GOSUB check_handler
+
+4570 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT RIGHT$("str", "1")
+4580 GOSUB check_handler
+
+4581 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT RIGHT$("str", q)
+4582 GOSUB check_handler
+
+4583 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT RIGHT$(s$, 2)
+4584 GOSUB check_handler
+
+4590 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT SGN("string")
+4600 GOSUB check_handler
+
+4601 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT SGN(q)
+4602 GOSUB check_handler
+
+4610 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT SIN("string")
+4620 GOSUB check_handler
+
+4621 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT SIN(q)
+4622 GOSUB check_handler
+
+4630 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT SQR("string")
+4640 GOSUB check_handler
+
+4650 E%=1:W%=ERR_NEGATIVE_ROOT:ON ERROR GOSUB handler:IF E% PRINT SQR(-9)
+4660 GOSUB check_handler
+
+4661 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT SQR(q)
+4662 GOSUB check_handler
+
+4670 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT STRING$("5", "string")
+4680 GOSUB check_handler
+
+4690 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT STRING$(5, 42)
+4700 GOSUB check_handler
+
+4701 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT STRING$(5, q$)
+4702 GOSUB check_handler
+
+4703 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT STRING$(s, "string")
+4704 GOSUB check_handler
+
+4710 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT STR$("string")
+4720 GOSUB check_handler
+
+4721 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT STR$(q$)
+4722 GOSUB check_handler
+
+4730 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT TAN("string")
+4740 GOSUB check_handler
+
+4741 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT TAN(q)
+4742 GOSUB check_handler
+
+4750 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT VAL(42)
+4760 GOSUB check_handler
+
+4770 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT VAL(3.14159)
+4780 GOSUB check_handler
+
+4781 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT VAL(q)
+4782 GOSUB check_handler
+
+4790 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT ASC(65)
+4800 GOSUB check_handler
+
+4810 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT ASC(3.14159)
+4820 GOSUB check_handler
+
+4821 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT ASC(q)
+4822 GOSUB check_handler
+
+4830 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT CHR$("string")
+4840 GOSUB check_handler
+
+4841 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT CHR$(q$)
+4842 GOSUB check_handler
+
+4850 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT RND("string")
+4860 GOSUB check_handler
+
+4870 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT RND(q)
+4880 GOSUB check_handler
+
+4890 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT SPC(none$)
+4900 GOSUB check_handler
+
+4910 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT SPC("string")
+4920 GOSUB check_handler
+
+6000 REM ==============================================================
+6010 REM Logical operator tests
+6020 REM ==============================================================
+
+6025 PRINT "5. Logical operator tests"
+
+6030 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT NOT "string" 
+6040 GOSUB check_handler
+
+6050 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT TRUE AND "abc"
+6060 GOSUB check_handler
+
+6070 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "abc" AND TRUE
+6080 GOSUB check_handler
+
+6090 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "abc" AND "def"
+6100 GOSUB check_handler
+
+6110 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT TRUE EOR "abc"
+6120 GOSUB check_handler
+
+6130 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "abc" EOR TRUE
+6140 GOSUB check_handler
+
+6150 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "abc" EOR "def"
+6160 GOSUB check_handler
+
+6170 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT TRUE OR "abc"
+6180 GOSUB check_handler
+
+6190 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "abc" OR TRUE
+6200 GOSUB check_handler
+
+6210 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT "abc" OR "def"
+6220 GOSUB check_handler
+
+6230 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT NOT q
+6240 GOSUB check_handler
+
+6250 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s AND 4
+6260 GOSUB check_handler
+
+6270 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3 AND q
+6280 GOSUB check_handler
+
+6290 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s AND q
+6300 GOSUB check_handler
+
+6310 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s EOR 4
+6320 GOSUB check_handler
+
+6330 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3 EOR q
+6340 GOSUB check_handler
+
+6350 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s EOR q
+6360 GOSUB check_handler
+
+6370 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s OR 4
+6380 GOSUB check_handler
+
+6390 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT 3 OR q
+6400 GOSUB check_handler
+
+6410 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT s OR q
+6420 GOSUB check_handler
+
+7000 REM ==============================================================
+7010 REM Branching
+7020 REM ==============================================================
+
+7030 PRINT "6. Branching"
+
+7100 E%=1:W%=ERR_NO_GOSUB:ON ERROR GOSUB handler:IF E% RETURN
+7110 GOSUB check_handler
+
+7120 E%=1:W%=ERR_NO_REPEAT:ON ERROR GOSUB handler:IF E% UNTIL FALSE
+7130 GOSUB check_handler
+
+7131 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% UNTIL q
+7132 GOSUB check_handler
+
+7140 E%=1:W%=ERR_NO_FOR:ON ERROR GOSUB handler:IF E% NEXT
+7150 GOSUB check_handler
+
+7160 E%=1:W%=ERR_NO_PROC:ON ERROR GOSUB handler:IF E% ENDPROC 
+7170 GOSUB check_handler
+
+7180 E%=1:W%=ERR_NO_SUCH_LINE:ON ERROR GOSUB handler:IF E% GOTO -1
+7190 GOSUB check_handler
+
+7191 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% GOTO q
+7192 GOSUB check_handler
+
+7200 E%=1:W%=ERR_NO_SUCH_LINE:ON ERROR GOSUB handler:IF E% GOSUB -1
+7210 GOSUB check_handler
+
+7211 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% GOSUB q
+7212 GOSUB check_handler
+
+7220 E%=1:W%=ERR_FOR_VARIABLE:ON ERROR GOSUB handler:IF E% FOR A$="var" TO 5:NEXT
+7230 GOSUB check_handler
+
+7240 E%=1:W%=ERR_NO_SUCH_FN_PROC:ON ERROR GOSUB handler:IF E% PROCno_such_proc
+7250 GOSUB check_handler
+
+7260 E%=1:W%=ERR_ARGUMENTS:ON ERROR GOSUB handler:IF E% PROCtestproc
+7270 GOSUB check_handler
+
+7280 E%=1:W%=ERR_ARGUMENTS:ON ERROR GOSUB handler:IF E% PROCtestproc(4)
+7290 GOSUB check_handler
+
+7300 E%=1:W%=ERR_ARGUMENTS:ON ERROR GOSUB handler:IF E% PROCtestproc(4, "str", 3.14159)
+7310 GOSUB check_handler
+
+7320 E%=1:W%=ERR_ARGUMENTS:ON ERROR GOSUB handler:IF E% PROCtestproc("str")
+7330 GOSUB check_handler
+
+7340 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PROCtestproc("str", 4)
+7350 GOSUB check_handler
+
+7360 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PROCtestproc(s, q)
+7370 GOSUB check_handler
+
+7380 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% A=FNtestfunc(q)
+7390 GOSUB check_handler
+
+7400 E%=1:W%=ERR_ARGUMENTS:ON ERROR GOSUB handler:IF E% A=FNtestfunc(2, 3)
+7410 GOSUB check_handler
+
+7420 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% A=FNtestfunc("string")
+7430 GOSUB check_handler
+
+7440 E%=1:W%=ERR_ARGUMENTS:ON ERROR GOSUB handler:IF E% A=FNtestfunc
+7450 GOSUB check_handler
+
+7460 E%=1:W%=ERR_NOT_LOCAL:ON ERROR GOSUB handler:IF E% LOCAL A$
+7470 GOSUB check_handler
+
+7480 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% GOTO 7490 ELSE GOTO 7500
+7490 ON none$ GOTO 7500
+7500 GOSUB check_handler
+
+7510 val$="string"
+7520 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% GOTO 7530 ELSE GOTO 7540
+7530 ON val$ GOTO 7500
+7540 GOSUB check_handler
+
+7550 E%=1:W%=ERR_ON_RANGE:ON ERROR GOSUB handler:IF E% GOTO 7560 ELSE GOTO 7570
+7560 ON 0 GOTO 7570
+7570 GOSUB check_handler
+
+7580 E%=1:W%=ERR_ON_RANGE:ON ERROR GOSUB handler:IF E% GOTO 7590 ELSE GOTO 7600
+7590 ON 2 GOTO 7600
+7600 GOSUB check_handler
+
+7610 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% GOTO 7620 ELSE GOTO 7630
+7620 ON 1 GOTO none$
+7630 GOSUB check_handler
+
+7640 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% GOTO 7650 ELSE GOTO 7660
+7650 ON 1 GOTO val$
+7660 GOSUB check_handler
+
+7670 E%=1:W%=ERR_NO_SUCH_LINE:ON ERROR GOSUB handler:IF E% GOTO 7680 ELSE GOTO 7690
+7680 ON 1 GOTO -1
+7690 GOSUB check_handler
+
+8000 REM ==============================================================
+8010 REM File handling
+8020 REM ==============================================================
+
+8030 PRINT "7. File handling"
+8040 C%=99:I%=1
+8050 file$="no_such.file"
+8060 E%=1:W%=ERR_CHANNEL:ON ERROR GOSUB handler:IF E% CLOSE# C%
+8070 GOSUB check_handler
+
+8071 E%=1:W%=ERR_CHANNEL:ON ERROR GOSUB handler:IF E% CLOSE# I%
+8072 GOSUB check_handler
+
+8080 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% CLOSE# file$
+8090 GOSUB check_handler
+
+8100 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% CLOSE# none$
+8110 GOSUB check_handler
+
+8120 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% G%=OPENIN(none$)
+8130 GOSUB check_handler
+
+8140 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% G%=OPENIN(C%)
+8150 GOSUB check_handler
+
+8160 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% G%=OPENOUT(none$)
+8170 GOSUB check_handler
+
+8180 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% G%=OPENOUT(C%)
+8190 GOSUB check_handler
+
+8200 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% G%=OPENUP(none$)
+8210 GOSUB check_handler
+
+8220 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% G%=OPENUP(C%)
+8230 GOSUB check_handler
+
+8500 E%=1:W%=ERR_CHANNEL:ON ERROR GOSUB handler:IF E% G%=BGET#C%
+8510 GOSUB check_handler
+
+8520 E%=1:W%=ERR_CHANNEL:ON ERROR GOSUB handler:IF E% G%=BGET#I%
+8530 GOSUB check_handler
+
+8540 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% G%=BGET#none$
+8550 GOSUB check_handler
+
+8560 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% G%=BGET#file$
+8570 GOSUB check_handler
+
+8580 E%=1:W%=ERR_CHANNEL:ON ERROR GOSUB handler:IF E% BPUT#C%, 72
+8590 GOSUB check_handler
+
+8600 E%=1:W%=ERR_CHANNEL:ON ERROR GOSUB handler:IF E% BPUT#I%, 72
+8610 GOSUB check_handler
+
+8620 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% BPUT#none$, 72
+8630 GOSUB check_handler
+
+8640 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% BPUT#file$, 72
+8650 GOSUB check_handler
+
+8660 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% BPUT#C%, file$
+8670 GOSUB check_handler
+
+8680 E%=1:W%=ERR_CHANNEL:ON ERROR GOSUB handler:IF E% G%=EXT#(C%)
+8690 GOSUB check_handler
+
+8700 E%=1:W%=ERR_CHANNEL:ON ERROR GOSUB handler:IF E% G%=EXT#(I%)
+8710 GOSUB check_handler
+
+8720 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% G%=EXT#(none$)
+8730 GOSUB check_handler
+
+8740 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% G%=EXT#(file$)
+8750 GOSUB check_handler
+
+8760 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT#none$, 4
+8770 GOSUB check_handler
+
+8780 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT#file$, 4
+8790 GOSUB check_handler
+
+8791 E%=1:W%=ERR_CHANNEL:ON ERROR GOSUB handler:IF E% PRINT#E%, 4
+8792 GOSUB check_handler
+
+8800 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT#C%, none$
+8810 GOSUB check_handler
+
+8820 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% INPUT#none$, q%
+8830 GOSUB check_handler
+
+8840 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% INPUT#file$, q%
+8850 GOSUB check_handler
+
+8851 E%=1:W%=ERR_CHANNEL:ON ERROR GOSUB handler:IF E% INPUT#E%, q%
+8852 GOSUB check_handler
+
+8860 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT PTR#none$
+8870 GOSUB check_handler
+
+8880 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PRINT PTR#file$
+8890 GOSUB check_handler
+
+8900 E%=1:W%=ERR_CHANNEL:ON ERROR GOSUB handler:IF E% PRINT PTR#E%
+8910 GOSUB check_handler
+
+8920 E%=1:W%=ERR_CHANNEL:ON ERROR GOSUB handler:IF E% PRINT PTR#C%
+8930 GOSUB check_handler
+
+8940 E%=1:W%=ERR_CHANNEL:ON ERROR GOSUB handler:IF E% PTR#C%=9
+8950 GOSUB check_handler
+
+8960 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PTR#C%=none$
+8970 GOSUB check_handler
+
+8980 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PTR#C%=file$
+8990 GOSUB check_handler
+
+9000 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PTR#none$=9
+9010 GOSUB check_handler
+
+9020 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% PTR#file$=9
+9030 GOSUB check_handler
+
+10000 REM ==============================================================
+10010 REM Arrays
+10020 REM ==============================================================
+
+10030 PRINT "8. Arrays"
+
+10040 DIM array$(10)
+10050 val$="string"
+10060 E%=1:W%=ERR_BAD_DIM:ON ERROR GOSUB handler:IF E% DIM array$(5)
+10070 GOSUB check_handler
+
+10080 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% DIM array1$(none)
+10090 GOSUB check_handler
+
+10100 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% DIM array2$(val$)
+10110 GOSUB check_handler
+
+10120 E%=1:W%=ERR_ARRAY:ON ERROR GOSUB handler:IF E% no_array$(2) = "string"
+10130 GOSUB check_handler
+
+10140 E%=1:W%=ERR_ARRAY:ON ERROR GOSUB handler:IF E% val$(2) = "string"
+10150 GOSUB check_handler
+
+10160 E%=1:W%=ERR_SUBSCRIPT:ON ERROR GOSUB handler:IF E% array$(11) = "string"
+10170 GOSUB check_handler
+
+10180 E%=1:W%=ERR_SUBSCRIPT:ON ERROR GOSUB handler:IF E% array$(-1) = "string"
+10190 GOSUB check_handler
+
+10200 E%=1:W%=ERR_MISSING_RPAREN:ON ERROR GOSUB handler:IF E% array$(3, 3) = "string"
+10210 GOSUB check_handler
+
+10220 DIM array2$(5, 5)
+10230 E%=1:W%=ERR_ARRAY:ON ERROR GOSUB handler:IF E% array2$(3) = "string"
+10240 GOSUB check_handler
+
+10250 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% array2$(3, 3) = 4
+10260 GOSUB check_handler
+
+10270 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% array2$(3, 3) = 3.14159
+10280 GOSUB check_handler
+
+10290 DIM array3(5)
+10300 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% array3(3) = "string"
+10310 GOSUB check_handler
+
+10320 DIM array4%(5)
+10330 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% array4%(3) = "string"
+10340 GOSUB check_handler
+
+10350 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% array4%(3) = 3.14159
+10360 GOSUB check_handler
+
+10370 E%=1:W%=ERR_ARRAY:ON ERROR GOSUB handler:IF E% PRINT no_array$(3)
+10380 GOSUB check_handler
+
+10390 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% PRINT array3(none)
+10400 GOSUB check_handler
+
+10410 E%=1:W%=ERR_ARRAY:ON ERROR GOSUB handler:IF E% PRINT val$(3)
+10420 GOSUB check_handler
+
+10430 E%=1:W%=ERR_SUBSCRIPT:ON ERROR GOSUB handler:IF E% PRINT array3(-1)
+10440 GOSUB check_handler
+
+10450 E%=1:W%=ERR_SUBSCRIPT:ON ERROR GOSUB handler:IF E% PRINT array3(42)
+10460 GOSUB check_handler
+
+10470 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% RESTORE none$
+10480 GOSUB check_handler
+
+10490 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% RESTORE val$
+10500 GOSUB check_handler
+
+10510 READ val$
+10520 E%=1:W%=ERR_OUT_OF_DATA:ON ERROR GOSUB handler:IF E% READ val$
+10530 GOSUB check_handler
+
+10540 RESTORE 900100
+10550 E%=1:W%=ERR_TYPE_MISMATCH:ON ERROR GOSUB handler:IF E% READ A%
+10560 GOSUB check_handler
+
+10570 RESTORE 900100
+10580 E%=1:W%=ERR_SUBSCRIPT:ON ERROR GOSUB handler:IF E% READ array$(100)
+10590 GOSUB check_handler
+
+10600 RESTORE 900100
+10610 E%=1:W%=ERR_NO_SUCH_VARIABLE:ON ERROR GOSUB handler:IF E% READ array$(none$)
+10620 GOSUB check_handler
+
+900000 PRINT "End of tests"
+900010 END
+
+900100 DATA string
+
+901000 REM ==============================================================
+901010 REM Test procedure
+901020 REM ==============================================================
+901030 DEF PROCtestproc(a, b$)
+901040 REM Do nothing
+901050 ENDPROC
+
+901100 REM ==============================================================
+901110 REM Test function
+901120 REM ==============================================================
+901130 DEF FNtestfunc(n)
+901140 REM Do nothing
+901150 =5
+
+1000000 REM ==============================================================
+1000010 REM Error handler
+1000020 REM ==============================================================
+1000030 ON ERROR OFF
+1000040 IF ERR<>W% PRINT "Unexpected error":PRINT ERR:GOTO trigger_error
+1000050 E%=0:W%=0
+1000070 RETURN
+
+1001000 REM ==============================================================
+1001010 REM A check that the error handler was actually invoked
+1001020 REM ==============================================================
+1001030 ON ERROR OFF
+1001040 IF W%=0 RETURN
+1001050 PRINT "Test unexpectedly succeeded"
+1001060 Z%=4/0

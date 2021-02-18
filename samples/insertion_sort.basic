@@ -1,0 +1,42 @@
+10 REM INSERTION SORT, an example of insertion sort
+20 REM Copyright (C) 2021 Paul Griffiths.
+30
+40 REM This program is free software; you can redistribute it and/or modify
+50 REM it under the terms of the GNU General Public License as published by
+60 REM the Free Software Foundation; either version 3, or (at your option)
+70 REM any later version.
+80
+90 REM This program is distributed in the hope that it will be useful,
+100 REM but WITHOUT ANY WARRANTY; without even the implied warranty of
+110 REM MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+120 REM GNU General Public License for more details.
+130
+140 REM You should have received a copy of the GNU General Public License
+150 REM along with this program; If not, see <https://www.gnu.org/licenses/>.
+160
+170 REM Populate unsorted data array
+180 DIM C$(26)
+190 FOR I%=1 TO 26
+200 READ C$(I%)
+210 NEXT I%
+220
+230 REM Build sorted array
+240 DIM S$(26)
+250 FOR out%=1 TO 26
+260 FOR in%=out% TO 1 STEP -1
+270 IF S$(in%-1)>C$(out%) THEN S$(in%)=S$(in%-1) ELSE GOTO 290
+280 NEXT in%
+290 S$(in%)=C$(out%)
+300 NEXT out%
+310
+320 REM Output sorted array
+330 FOR I%=1 TO 26
+340 PRINT S$(I%)
+350 NEXT I%
+360 END
+370
+400 DATA Qatar, Croatia, Wales, Brazil, Germany, Zambia, Switzerland
+410 DATA Russia, Norway, Finland, England, Portugal, Xanadu, Denmark
+420 DATA Australia, India, Jordan, United States of America, Yemen
+430 DATA Hungary, Kazakhstan, Mexico, Tunisia, Luxembourg, Oman
+440 DATA Venezuela

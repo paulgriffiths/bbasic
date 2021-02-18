@@ -1,0 +1,125 @@
+10 REM ==============================================================
+20 REM Arrays test suite
+30 REM ==============================================================
+40 PROC_int_array
+50 PROC_real_array
+60 PROC_string_array
+70 PROC_basic_read
+
+1000 PRINT "End of tests"
+1010 END
+
+2000 DEF PROC_int_array
+2010 REM   ============================================================
+2020 PRINT "1. Simple integer array"
+2030 REM   ============================================================
+2040 DIM int%(3, 3)
+2050
+2060 v=1
+2070 FOR x=0 TO 3
+2080 FOR y=0 TO 3
+2090 int%(x,y)=v
+2100 v=v+1
+2110 NEXT y
+2120 NEXT x
+2130
+2140 v=1
+2150 FOR x=0 TO 3
+2160 FOR y=0 TO 3
+2170 IF int%(x,y)<>v PRINT x,y,int%(x,y):PROCtrip_error
+2180 v=v+1
+2190 NEXT y
+2200 NEXT x
+
+2500 ENDPROC
+
+3000 DEF PROC_real_array
+3010 REM   ============================================================
+3020 PRINT "2. Simple real array"
+3030 REM   ============================================================
+3040 DIM real(7)
+3050
+3060 v=1
+3070 FOR x=0 TO 7
+3080 real(x)=v
+3090 v=v+1
+3100 NEXT x
+3110
+3120 v=1
+3130 FOR x=0 TO 7
+3140 IF real(x)<>v PRINT x,real(x):PROCtrip_error
+3150 v=v+1
+3160 NEXT x
+
+3500 ENDPROC
+
+4000 DEF PROC_string_array
+4010 REM   ============================================================
+4020 PRINT "3. Simple string array"
+4030 REM   ============================================================
+4040 DIM str$(4, 3, 2)
+4050
+4060 v=ASC("0")
+4070 FOR x=0 TO 4
+4080 FOR y=0 TO 3
+4090 FOR z=0 TO 2
+4100 str$(x,y,z)=CHR$(v)
+4110 v=v+1
+4120 NEXT z
+4130 NEXT y
+4140 NEXT x
+4150
+4160 v=ASC("0")
+4170 FOR x=0 TO 4
+4180 FOR y=0 TO 3
+4190 FOR z=0 TO 2
+4200 IF str$(x,y,z)<>CHR$(v) PRINT x,y,z,":",str$(x,y,z):PROCtrip_error
+4210 v=v+1
+4220 NEXT z
+4230 NEXT y
+4240 NEXT x
+
+4500 ENDPROC
+
+5000 DEF PROC_basic_read
+5010 REM   ============================================================
+5020 PRINT "4. Basic READ and RESTORE"
+5030 REM   ============================================================
+5040 DIM capital$(7):DIM countrie$(7)
+5050 FOR I=1 TO 5
+5060 READ capital$(I), countrie$(I)
+5070 NEXT I
+5080 IF capital$(1)<>"Paris" PRINT capital$(1):PROCtrip_error
+5090 IF capital$(2)<>"Reykjavik" PRINT capital$(2):PROCtrip_error
+5100 IF capital$(3)<>"Moscow" PRINT capital$(3):PROCtrip_error
+5110 IF capital$(4)<>"Athens" PRINT capital$(4):PROCtrip_error
+5120 IF capital$(5)<>"Spitzbergen" PRINT capital$(5):PROCtrip_error
+5130 IF countrie$(1)<>"France" PRINT countrie$(1):PROCtrip_error
+5140 IF countrie$(2)<>"Iceland" PRINT countrie$(2):PROCtrip_error
+5150 IF countrie$(3)<>"Soviet Union" PRINT countrie$(3):PROCtrip_error
+5160 IF countrie$(4)<>"Greece" PRINT countrie$(4):PROCtrip_error
+5170 IF countrie$(5)<>"Spitzbergen" PRINT countrie$(5):PROCtrip_error
+5180 RESTORE 900020
+5190 FOR I=6 TO 7
+5200 READ capital$(I), countrie$(I)
+5210 NEXT I
+5220 IF capital$(6)<>"Moscow" PRINT capital$(6):PROCtrip_error
+5230 IF capital$(7)<>"Athens" PRINT capital$(7):PROCtrip_error
+5240 IF countrie$(6)<>"Soviet Union" PRINT countrie$(6):PROCtrip_error
+5250 IF countrie$(7)<>"Greece" PRINT countrie$(7):PROCtrip_error
+
+5500 ENDPROC
+
+900000 DATA Paris, France, Reykjavik
+900010 DATA Iceland
+900020 DATA Moscow, Soviet Union
+900030 DATA Athens, Greece
+900040 DATA Spitzbergen, Spitzbergen
+
+1000000 DEF PROCtrip_error
+1000010 REM ==============================================================
+1000020 REM Deliberate division by zero to fail a test
+1000030 REM ==============================================================
+1000040 PRINT "Test failed!"
+1000050 PRINT 4/0
+1000060 ENDPROC

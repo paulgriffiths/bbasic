@@ -1,0 +1,333 @@
+10 REM ==============================================================
+20 REM Arithmetic statements test suite
+30 REM ==============================================================
+40 trip_error=1000000
+
+1000 REM   ============================================================
+1010 PRINT "1. Builtin functions test"
+1020 REM   ============================================================
+
+1030 REM   Floating point tests made by PRINTing with fixed
+1040 REM   precision, to avoid floating point errors.
+
+1100 A=ABS(4):IF A<>4 PRINT A:GOTO trip_error
+1110 A=ABS(-4):IF A<>4 PRINT A:GOTO trip_error
+1120 A=ABS(4.5):IF A<>4.5 PRINT A:GOTO trip_error
+1130 A=ABS(-4.5):IF A<>4.5 PRINT A:GOTO trip_error
+
+1200 @%=&020801:A$=STR$(ACS(-1)): IF A$<>"3.14159265" PRINT A$:GOTO trip_error
+1210 @%=&020801:A$=STR$(ACS(0.5)): IF A$<>"1.04719755" PRINT A$:GOTO trip_error
+1220 @%=&020801:A$=STR$(ACS(-0.5)): IF A$<>"2.09439510" PRINT A$:GOTO trip_error
+
+1300 @%=&020801:A$=STR$(ASN(1)): IF A$<>"1.57079633" PRINT A$:GOTO trip_error
+1310 @%=&020801:A$=STR$(ASN(0.5)): IF A$<>"0.52359878" PRINT A$:GOTO trip_error
+1320 @%=&020801:A$=STR$(ASN(-0.5)): IF A$<>"-0.52359878" PRINT A$:GOTO trip_error
+
+1400 @%=&020801:A$=STR$(ATN(3)): IF A$<>"1.24904577" PRINT A$:GOTO trip_error
+1410 @%=&020801:A$=STR$(ATN(0.5)): IF A$<>"0.46364761" PRINT A$:GOTO trip_error
+1420 @%=&020801:A$=STR$(ATN(-0.5)): IF A$<>"-0.46364761" PRINT A$:GOTO trip_error
+
+1500 @%=&020801:A$=STR$(COS(5)): IF A$<>"0.28366219" PRINT A$:GOTO trip_error
+1510 @%=&020801:A$=STR$(COS(5.5)): IF A$<>"0.70866977" PRINT A$:GOTO trip_error
+1520 @%=&020801:A$=STR$(COS(-3.5)): IF A$<>"-0.93645669" PRINT A$:GOTO trip_error
+
+1600 @%=&020501:A$=STR$(DEG(50)): IF A$<>"2864.78898" PRINT A$:GOTO trip_error
+1610 @%=&020501:A$=STR$(DEG(50.5)): IF A$<>"2893.43687" PRINT A$:GOTO trip_error
+1620 @%=&020501:A$=STR$(DEG(-35.5)): IF A$<>"-2034.00017" PRINT A$:GOTO trip_error
+
+1700 @%=&020601:A$=STR$(EXP(5)): IF A$<>"148.413159" PRINT A$:GOTO trip_error
+1710 @%=&020601:A$=STR$(EXP(5.5)): IF A$<>"244.691932" PRINT A$:GOTO trip_error
+1720 @%=&020601:A$=STR$(EXP(-4.5)): IF A$<>"0.011109" PRINT A$:GOTO trip_error
+
+1800 A=INT(5):IF A<>5 PRINT A:GOTO trip_error
+1810 A=INT(-5):IF A<>-5 PRINT A:GOTO trip_error
+1820 A=INT(5.5):IF A<>5 PRINT A:GOTO trip_error
+1830 A=INT(-5.5):IF A<>-6 PRINT A:GOTO trip_error
+
+1900 @%=&020801:A$=STR$(LN(42)): IF A$<>"3.73766962" PRINT A$:GOTO trip_error
+1910 @%=&020801:A$=STR$(LN(42.5)): IF A$<>"3.74950408" PRINT A$:GOTO trip_error
+1920 @%=&020801:A$=STR$(LOG(42)): IF A$<>"1.62324929" PRINT A$:GOTO trip_error
+1930 @%=&020801:A$=STR$(LOG(42.5)): IF A$<>"1.62838893" PRINT A$:GOTO trip_error
+
+2000 @%=&020801:A$=STR$(RAD(125)): IF A$<>"2.18166156" PRINT A$:GOTO trip_error
+2010 @%=&020801:A$=STR$(RAD(125.5)): IF A$<>"2.19038821" PRINT A$:GOTO trip_error
+2020 @%=&020801:A$=STR$(RAD(-75.5)): IF A$<>"-1.31772359" PRINT A$:GOTO trip_error
+
+2100 A=SGN(42):IF A<>1 PRINT A:GOTO trip_error
+2110 A=SGN(0):IF A<>0 PRINT A:GOTO trip_error
+2120 A=SGN(-42):IF A<>-1 PRINT A:GOTO trip_error
+2130 A=SGN(42.5):IF A<>1 PRINT A:GOTO trip_error
+2140 A=SGN(0.0):IF A<>0 PRINT A:GOTO trip_error
+2150 A=SGN(-42.5):IF A<>-1 PRINT A:GOTO trip_error
+
+2200 @%=&020801:A$=STR$(SIN(2)): IF A$<>"0.90929743" PRINT A$:GOTO trip_error
+2210 @%=&020801:A$=STR$(SIN(2.5)): IF A$<>"0.59847214" PRINT A$:GOTO trip_error
+2220 @%=&020801:A$=STR$(SIN(-1.5)): IF A$<>"-0.99749499" PRINT A$:GOTO trip_error
+
+2300 @%=&020801:A$=STR$(SQR(16)): IF A$<>"4.00000000" PRINT A$:GOTO trip_error
+2310 @%=&020801:A$=STR$(SQR(21.0)): IF A$<>"4.58257569" PRINT A$:GOTO trip_error
+
+2400 @%=&020801:A$=STR$(TAN(2)): IF A$<>"-2.18503986" PRINT A$:GOTO trip_error
+2410 @%=&020801:A$=STR$(TAN(2.5)): IF A$<>"-0.74702230" PRINT A$:GOTO trip_error
+2420 @%=&020801:A$=STR$(TAN(-1.5)): IF A$<>"-14.10141995" PRINT A$:GOTO trip_error
+
+2500 A=ERL:IF A<>0 PRINT A:GOTO trip_error
+2510 A=ERR:IF A<>0 PRINT A:GOTO trip_error
+
+2520 A=RND(-42)
+2530 FOR B=1 TO 50
+2540 A=RND(10)
+2550 IF A<1 OR A>10 PRINT A:GOTO trip_error
+2560 NEXT B
+
+2570 IF RND(0)<>RND(0) GOTO trip_error
+
+2580 A=RND(1):IF RND(0)<>A GOTO trip_error
+2590 REM Next condition has a small chance of being true
+2600 B=RND(1):IF RND(0)=A GOTO trip_error
+
+2610 REM Just to make sure we can read the TIME pseudo variable
+2620 A=TIME
+
+3000 REM   ============================================================
+3010 PRINT "2. Comparison operators test"
+3020 REM   ============================================================
+
+3100 C=(4=5):IF C<>FALSE PRINT C:GOTO trip_error
+3110 C=(5=5):IF C<>TRUE PRINT C:GOTO trip_error
+3120 C=("abc"="def"):IF C<>FALSE PRINT C:GOTO trip_error
+3130 C=("abc"="abc"):IF C<>TRUE PRINT C:GOTO trip_error
+3140 C=(4<>5):IF C<>TRUE PRINT C:GOTO trip_error
+3150 C=(5<>5):IF C<>FALSE PRINT C:GOTO trip_error
+3160 C=("abc"<>"def"):IF C<>TRUE PRINT C:GOTO trip_error
+3170 C=("abc"<>"abc"):IF C<>FALSE PRINT C:GOTO trip_error
+3180 C=(4<5.0):IF C<>TRUE PRINT C:GOTO trip_error
+3190 C=(4.0<4):IF C<>FALSE PRINT C:GOTO trip_error
+3200 C=(5.0<4):IF C<>FALSE PRINT C:GOTO trip_error
+3210 C=("abc"<"abd"):IF C<>TRUE PRINT C:GOTO trip_error
+3220 C=("abc"<"abc"):IF C<>FALSE PRINT C:GOTO trip_error
+3230 C=("abc"<"abb"):IF C<>FALSE PRINT C:GOTO trip_error
+3240 C=(4.2<=5.2):IF C<>TRUE PRINT C:GOTO trip_error
+3250 C=(4.2<=4.2):IF C<>TRUE PRINT C:GOTO trip_error
+3260 C=(5.2<=4.2):IF C<>FALSE PRINT C:GOTO trip_error
+3270 C=("abc"<="abd"):IF C<>TRUE PRINT C:GOTO trip_error
+3280 C=("abc"<="abc"):IF C<>TRUE PRINT C:GOTO trip_error
+3290 C=("abc"<="abb"):IF C<>FALSE PRINT C:GOTO trip_error
+3300 C=(4>5):IF C<>FALSE PRINT C:GOTO trip_error
+3310 C=(4>4):IF C<>FALSE PRINT C:GOTO trip_error
+3320 C=(5>4):IF C<>TRUE PRINT C:GOTO trip_error
+3330 C=("abc">"abd"):IF C<>FALSE PRINT C:GOTO trip_error
+3340 C=("abc">"abc"):IF C<>FALSE PRINT C:GOTO trip_error
+3350 C=("abc">"abb"):IF C<>TRUE PRINT C:GOTO trip_error
+3360 C=(4>=5):IF C<>FALSE PRINT C:GOTO trip_error
+3370 C=(4>=4):IF C<>TRUE PRINT C:GOTO trip_error
+3380 C=(5>=4):IF C<>TRUE PRINT C:GOTO trip_error
+3390 C=("abc">="abd"):IF C<>FALSE PRINT C:GOTO trip_error
+3400 C=("abc">="abc"):IF C<>TRUE PRINT C:GOTO trip_error
+3410 C=("abc">="abb"):IF C<>TRUE PRINT C:GOTO trip_error
+
+4000 REM   ============================================================
+4010 PRINT "3. Arithmetic operators test"
+4020 REM   ============================================================
+
+4100 S=+3+4:IF S<>7 PRINT S:GOTO trip_error
+4110 S=3++4:IF S<>7 PRINT S:GOTO trip_error
+4120 S=+3++4:IF S<>7 PRINT S:GOTO trip_error
+4130 S=-3+4:IF S<>1 PRINT S:GOTO trip_error
+4140 S=3+-4:IF S<>-1 PRINT S:GOTO trip_error
+4150 S=-3+-4:IF S<>-7 PRINT S:GOTO trip_error
+
+4200 S=3+4:IF S<>7 PRINT S:GOTO trip_error
+4210 S=3.5+4:IF S<>7.5 PRINT S:GOTO trip_error
+4220 S=3+4.5:IF S<>7.5 PRINT S:GOTO trip_error
+4230 S=3.5+4.5:IF S<>8 PRINT S:GOTO trip_error
+4240 S$="abc"+"def":IF S$<>"abcdef" PRINT S:GOTO trip_error
+
+4300 S=3-4:IF S<>-1 PRINT S:GOTO trip_error
+4310 S=3.5-4:IF S<>-0.5 PRINT S:GOTO trip_error
+4320 S=3-4.5:IF S<>-1.5 PRINT S:GOTO trip_error
+4330 S=3.5-4.5:IF S<>-1 PRINT S:GOTO trip_error
+
+4400 S=3*4:IF S<>12 PRINT S:GOTO trip_error
+4410 S=3.5*4:IF S<>14 PRINT S:GOTO trip_error
+4420 S=3*4.5:IF S<>13.5 PRINT S:GOTO trip_error
+4430 S=3.5*4.5:IF S<>15.75 PRINT S:GOTO trip_error
+
+4500 S=6/2:IF S<>3 PRINT S:GOTO trip_error
+4510 S=7/3.5:IF S<>2 PRINT S:GOTO trip_error
+4520 S=3.5/0.5:IF S<>7 PRINT S:GOTO trip_error
+4530 S=8.25/1.5:IF S<>5.5 PRINT S:GOTO trip_error
+
+4600 S=3^4:IF S<>81 PRINT S:GOTO trip_error
+4610 S=9^0.5:IF S<>3 PRINT S:GOTO trip_error
+4620 S=3.5^2:IF S<>12.25 PRINT S:GOTO trip_error
+4630 S=12.25^0.5:IF S<>3.5 PRINT S:GOTO trip_error
+
+4700 S=14 DIV 3:IF S<>4 PRINT S:GOTO trip_error
+4710 S=14 DIV -3:IF S<>-4 PRINT S:GOTO trip_error
+4720 S=-14 DIV 3:IF S<>-4 PRINT S:GOTO trip_error
+4730 S=-14 DIV -3:IF S<>4 PRINT S:GOTO trip_error
+
+4800 S=14 MOD 3:IF S<>2 PRINT S:GOTO trip_error
+4810 S=14 MOD -3:IF S<>2 PRINT S:GOTO trip_error
+4820 S=-14 MOD 3:IF S<>-2 PRINT S:GOTO trip_error
+4830 S=-14 MOD -3:IF S<>-2 PRINT S:GOTO trip_error
+
+4900 S=14.1 DIV 3.1:IF S<>4 PRINT S:GOTO trip_error
+4910 S=14.1 DIV -3.1:IF S<>-4 PRINT S:GOTO trip_error
+4920 S=-14.1 DIV 3.1:IF S<>-4 PRINT S:GOTO trip_error
+4930 S=-14.1 DIV -3.1:IF S<>4 PRINT S:GOTO trip_error
+
+5000 S=14.1 DIV 3.9:IF S<>4 PRINT S:GOTO trip_error
+5010 S=14.1 DIV -3.9:IF S<>-4 PRINT S:GOTO trip_error
+5020 S=-14.1 DIV 3.9:IF S<>-4 PRINT S:GOTO trip_error
+5030 S=-14.1 DIV -3.9:IF S<>4 PRINT S:GOTO trip_error
+
+5100 S=14.9 DIV 3.1:IF S<>4 PRINT S:GOTO trip_error
+5110 S=14.9 DIV -3.1:IF S<>-4 PRINT S:GOTO trip_error
+5120 S=-14.9 DIV 3.1:IF S<>-4 PRINT S:GOTO trip_error
+5130 S=-14.9 DIV -3.1:IF S<>4 PRINT S:GOTO trip_error
+
+5200 S=14.9 DIV 3.9:IF S<>4 PRINT S:GOTO trip_error
+5210 S=14.9 DIV -3.9:IF S<>-4 PRINT S:GOTO trip_error
+5220 S=-14.9 DIV 3.9:IF S<>-4 PRINT S:GOTO trip_error
+5230 S=-14.9 DIV -3.9:IF S<>4 PRINT S:GOTO trip_error
+
+5300 S=14.1 MOD 3.1:IF S<>2 PRINT S:GOTO trip_error
+5310 S=14.1 MOD -3.1:IF S<>2 PRINT S:GOTO trip_error
+5320 S=-14.1 MOD 3.1:IF S<>-2 PRINT S:GOTO trip_error
+5330 S=-14.1 MOD -3.1:IF S<>-2 PRINT S:GOTO trip_error
+
+5400 S=14.1 MOD 3.9:IF S<>2 PRINT S:GOTO trip_error
+5410 S=14.1 MOD -3.9:IF S<>2 PRINT S:GOTO trip_error
+5420 S=-14.1 MOD 3.9:IF S<>-2 PRINT S:GOTO trip_error
+5430 S=-14.1 MOD -3.9:IF S<>-2 PRINT S:GOTO trip_error
+
+5500 S=14.9 MOD 3.1:IF S<>2 PRINT S:GOTO trip_error
+5510 S=14.9 MOD -3.1:IF S<>2 PRINT S:GOTO trip_error
+5520 S=-14.9 MOD 3.1:IF S<>-2 PRINT S:GOTO trip_error
+5530 S=-14.9 MOD -3.1:IF S<>-2 PRINT S:GOTO trip_error
+
+5600 S=14.9 MOD 3.9:IF S<>2 PRINT S:GOTO trip_error
+5610 S=14.9 MOD -3.9:IF S<>2 PRINT S:GOTO trip_error
+5620 S=-14.9 MOD 3.9:IF S<>-2 PRINT S:GOTO trip_error
+5630 S=-14.9 MOD -3.9:IF S<>-2 PRINT S:GOTO trip_error
+
+5700 S=2+3*4:IF S<>14 PRINT S:GOTO trip_error
+5710 S=(2+3)*4:IF S<>20 PRINT S:GOTO trip_error
+5720 S=2-3*4:IF S<>-10 PRINT S:GOTO trip_error
+5730 S=(2-3)*4:IF S<>-4 PRINT S:GOTO trip_error
+5740 S=5+8/4:IF S<>7 PRINT S:GOTO trip_error
+5750 S=(5+8)/4:IF S<>3.25 PRINT S:GOTO trip_error
+5760 S=12-8/4:IF S<>10 PRINT S:GOTO trip_error
+5770 S=(12-8)/4:IF S<>1 PRINT S:GOTO trip_error
+5780 S=2+3^4:IF S<>83 PRINT S:GOTO trip_error
+5790 S=(2+3)^4:IF S<>625 PRINT S:GOTO trip_error
+5800 S=2-3^4:IF S<>-79 PRINT S:GOTO trip_error
+5810 S=(2-3)^4:IF S<>1 PRINT S:GOTO trip_error
+
+5900 S=2-3-4:IF S<>-5 PRINT S:GOTO trip_error
+5910 S=2-(3-4):IF S<>3 PRINT S:GOTO trip_error
+5920 S=16/4/2:IF S<>2 PRINT S:GOTO trip_error
+5930 S=16/(4/2):IF S<>8 PRINT S:GOTO trip_error
+5940 S=4^3^2:IF S<>4096 PRINT S:GOTO trip_error
+5950 S=4^(3^2):IF S<>262144 PRINT S:GOTO trip_error
+
+7000 REM   ============================================================
+7010 PRINT "4. Boolean operators test"
+7020 REM   ============================================================
+
+7100 B=NOT 2:IF B<>-3 PRINT B:GOTO trip_error
+7110 B=NOT 1:IF B<>-2 PRINT B:GOTO trip_error
+7120 B=NOT 0:IF B<>-1 PRINT B:GOTO trip_error
+7130 B=NOT -1:IF B<>0 PRINT B:GOTO trip_error
+7140 B=NOT -2:IF B<>1 PRINT B:GOTO trip_error
+7150 B=NOT -3:IF B<>2 PRINT B:GOTO trip_error
+7160 B=NOT 2.1:IF B<>-3 PRINT B:GOTO trip_error
+7170 B=NOT 1.9:IF B<>-2 PRINT B:GOTO trip_error
+7180 B=NOT 0.0:IF B<>-1 PRINT B:GOTO trip_error
+7190 B=NOT -1.1:IF B<>0 PRINT B:GOTO trip_error
+7200 B=NOT -2.9:IF B<>1 PRINT B:GOTO trip_error
+7210 B=NOT -3.1:IF B<>2 PRINT B:GOTO trip_error
+
+7300 B=1 AND 2:IF B<>0 PRINT B:GOTO trip_error
+7310 B=1 AND 3:IF B<>1 PRINT B:GOTO trip_error
+7320 B=-1 AND 2:IF B<>2 PRINT B:GOTO trip_error
+7330 B=-1 AND 3:IF B<>3 PRINT B:GOTO trip_error
+7340 B=1 AND -2:IF B<>0 PRINT B:GOTO trip_error
+7350 B=1 AND -3:IF B<>1 PRINT B:GOTO trip_error
+7360 B=-1 AND -2:IF B<>-2 PRINT B:GOTO trip_error
+7370 B=-1 AND -3:IF B<>-3 PRINT B:GOTO trip_error
+7380 B=1.1 AND 2.1:IF B<>0 PRINT B:GOTO trip_error
+7390 B=1.1 AND 3.9:IF B<>1 PRINT B:GOTO trip_error
+7400 B=-1.9 AND 2.1:IF B<>2 PRINT B:GOTO trip_error
+7410 B=-1.9 AND 3.9:IF B<>3 PRINT B:GOTO trip_error
+7420 B=1.1 AND -2.1:IF B<>0 PRINT B:GOTO trip_error
+7430 B=1.1 AND -3.9:IF B<>1 PRINT B:GOTO trip_error
+7440 B=-1.9 AND -2.1:IF B<>-2 PRINT B:GOTO trip_error
+7450 B=-1.9 AND -3.9:IF B<>-3 PRINT B:GOTO trip_error
+
+7500 B=1 EOR 2:IF B<>3 PRINT B:GOTO trip_error
+7510 B=1 EOR 3:IF B<>2 PRINT B:GOTO trip_error
+7520 B=-1 EOR 2:IF B<>-3 PRINT B:GOTO trip_error
+7530 B=-1 EOR 3:IF B<>-4 PRINT B:GOTO trip_error
+7540 B=1 EOR -2:IF B<>-1 PRINT B:GOTO trip_error
+7550 B=1 EOR -3:IF B<>-4 PRINT B:GOTO trip_error
+7560 B=-1 EOR -2:IF B<>1 PRINT B:GOTO trip_error
+7570 B=-1 EOR -3:IF B<>2 PRINT B:GOTO trip_error
+7580 B=1.1 EOR 2.1:IF B<>3 PRINT B:GOTO trip_error
+7590 B=1.1 EOR 3.9:IF B<>2 PRINT B:GOTO trip_error
+7600 B=-1.9 EOR 2.1:IF B<>-3 PRINT B:GOTO trip_error
+7610 B=-1.9 EOR 3.9:IF B<>-4 PRINT B:GOTO trip_error
+7620 B=1.1 EOR -2.1:IF B<>-1 PRINT B:GOTO trip_error
+7630 B=1.1 EOR -3.9:IF B<>-4 PRINT B:GOTO trip_error
+7640 B=-1.9 EOR -2.1:IF B<>1 PRINT B:GOTO trip_error
+7650 B=-1.9 EOR -3.9:IF B<>2 PRINT B:GOTO trip_error
+
+7700 B=1 OR 2:IF B<>3 PRINT B:GOTO trip_error
+7710 B=1 OR 3:IF B<>3 PRINT B:GOTO trip_error
+7720 B=-1 OR 2:IF B<>-1 PRINT B:GOTO trip_error
+7730 B=-1 OR 3:IF B<>-1 PRINT B:GOTO trip_error
+7740 B=1 OR -2:IF B<>-1 PRINT B:GOTO trip_error
+7750 B=1 OR -3:IF B<>-3 PRINT B:GOTO trip_error
+7760 B=-1 OR -2:IF B<>-1 PRINT B:GOTO trip_error
+7770 B=-1 OR -3:IF B<>-1 PRINT B:GOTO trip_error
+7780 B=1.1 OR 2.1:IF B<>3 PRINT B:GOTO trip_error
+7790 B=1.1 OR 3.9:IF B<>3 PRINT B:GOTO trip_error
+7800 B=-1.9 OR 2.1:IF B<>-1 PRINT B:GOTO trip_error
+7810 B=-1.9 OR 3.9:IF B<>-1 PRINT B:GOTO trip_error
+7820 B=1.1 OR -2.1:IF B<>-1 PRINT B:GOTO trip_error
+7830 B=1.1 OR -3.9:IF B<>-3 PRINT B:GOTO trip_error
+7840 B=-1.9 OR -2.1:IF B<>-1 PRINT B:GOTO trip_error
+7850 B=-1.9 OR -3.9:IF B<>-1 PRINT B:GOTO trip_error
+
+7900 B=NOT TRUE:IF B<>0 PRINT B:GOTO trip_error
+7910 B=NOT FALSE:IF B<>-1 PRINT B:GOTO trip_error
+7920 B=TRUE AND TRUE:IF B<>TRUE PRINT B:GOTO trip_error
+7930 B=TRUE AND FALSE:IF B<>FALSE PRINT B:GOTO trip_error
+7940 B=FALSE AND TRUE:IF B<>FALSE PRINT B:GOTO trip_error
+7950 B=FALSE AND FALSE:IF B<>FALSE PRINT B:GOTO trip_error
+7960 B=TRUE EOR TRUE:IF B<>FALSE PRINT B:GOTO trip_error
+7970 B=TRUE EOR FALSE:IF B<>TRUE PRINT B:GOTO trip_error
+7980 B=FALSE EOR TRUE:IF B<>TRUE PRINT B:GOTO trip_error
+7990 B=FALSE EOR FALSE:IF B<>FALSE PRINT B:GOTO trip_error
+8000 B=TRUE OR TRUE:IF B<>TRUE PRINT B:GOTO trip_error
+8010 B=TRUE OR FALSE:IF B<>TRUE PRINT B:GOTO trip_error
+8020 B=FALSE OR TRUE:IF B<>TRUE PRINT B:GOTO trip_error
+8030 B=FALSE OR FALSE:IF B<>FALSE PRINT B:GOTO trip_error
+8040 B=TRUE AND NOT TRUE:IF B<>FALSE PRINT B:GOTO trip_error
+8050 B=TRUE AND NOT FALSE:IF B<>TRUE PRINT B:GOTO trip_error
+8060 B=TRUE EOR NOT TRUE:IF B<>TRUE PRINT B:GOTO trip_error
+8070 B=TRUE EOR NOT FALSE:IF B<>FALSE PRINT B:GOTO trip_error
+8080 B=TRUE OR NOT TRUE:IF B<>TRUE PRINT B:GOTO trip_error
+8090 B=TRUE OR NOT FALSE:IF B<>TRUE PRINT B:GOTO trip_error
+8100 B=TRUE OR FALSE AND FALSE:IF B<>TRUE PRINT B:GOTO trip_error
+8110 B=(TRUE OR FALSE) AND FALSE:IF B<>FALSE PRINT B:GOTO trip_error
+
+999980 PRINT "End of tests"
+999990 END
+
+1000000 REM ==============================================================
+1000010 REM Deliberate division by zero to fail a test
+1000020 REM ==============================================================
+1000030 PRINT 4/0

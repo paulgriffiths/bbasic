@@ -1,0 +1,122 @@
+10 REM ==============================================================
+20 REM File handling test suite
+30 REM ==============================================================
+40 infile$="test_in.file"
+50 outfile$="test_out.file"
+60 fakefile$="no_such.file"
+70 PROCopen
+80 PROCread_bytes
+90 PROCwrite_bytes
+100 PROCext_eof
+110 PROCprintf_inputf
+
+1000 PRINT "End of tests"
+1010 END
+
+2000 DEF PROCopen
+2010 REM   ============================================================
+2020 PRINT "1. Opening and closing files"
+2030 REM   ============================================================
+2040 C=OPENIN(fakefile$)
+2050 IF C<>0 PRINT C:PROCtrip_error
+2060 C=OPENUP(fakefile$)
+2070 IF C<>0 PRINT C:PROCtrip_error
+2080 C=OPENIN(infile$)
+2090 IF C=0 PRINT C:PROCtrip_error
+2100 CLOSE# C
+2110 C=OPENOUT(outfile$)
+2120 IF C=0 PRINT C:PROCtrip_error
+2130 CLOSE# C
+2140 C=OPENUP(infile$)
+2150 IF C=0 PRINT C:PROCtrip_error
+2160 CLOSE# C
+2170 C=OPENIN(infile$)
+2180 D=OPENIN(infile$)
+2190 E=OPENIN(infile$)
+2200 CLOSE# 0
+2210 ENDPROC
+
+2500 DEF PROCread_bytes
+2510 REM   ============================================================
+2520 PRINT "2. Reading bytes from files"
+2530 REM   ============================================================
+2540 C=OPENIN(infile$)
+2550 got$=""
+2560 FOR I=1 TO 13:got$=got$+CHR$(BGET#C):NEXT I
+2570 IF got$<>"Hello, world!" PRINT got$:PROCtrip_error
+2580 CLOSE# C
+2590 C=OPENUP(infile$)
+2600 got$=""
+2610 FOR I=1 TO 13:got$=got$+CHR$(BGET#C):NEXT I
+2620 IF got$<>"Hello, world!" PRINT got$:PROCtrip_error
+2630 CLOSE# C
+2640 ENDPROC
+
+3000 DEF PROCwrite_bytes
+3010 REM   ============================================================
+3020 PRINT "3. Writing bytes to files"
+3030 REM   ============================================================
+3040 C=OPENOUT(outfile$)
+3050 BPUT#C, ASC("S"):BPUT#C, ASC("h"):BPUT#C, ASC("e"):BPUT#C, ASC("r")
+3060 BPUT#C, ASC("l"):BPUT#C, ASC("o"):BPUT#C, ASC("c"):BPUT#C, ASC("k")
+3070 CLOSE# C
+3080 C=OPENIN(outfile$)
+3090 got$=""
+3100 FOR I=1 TO 8:got$=got$+CHR$(BGET#C):NEXT I
+3110 IF got$<>"Sherlock" PRINT got$:PROCtrip_error
+3120 CLOSE# C
+3130 ENDPROC
+
+4000 DEF PROCext_eof
+4010 REM   ============================================================
+4020 PRINT "4. EXT# and EOF# functions"
+4030 REM   ============================================================
+4040 C=OPENIN(infile$)
+4050 FOR I=1 TO EXT#(C)
+4060 IF EOF#(C) PROCtrip_error
+4070 G%=BGET#C
+4080 NEXT I
+4090 IF NOT EOF#(C) PROCtrip_error
+4100 CLOSE# C
+4110 ENDPROC
+
+5000 DEF PROCprintf_inputf
+5010 REM   ============================================================
+5020 PRINT "5. PRINT#, INPUT# and PTR#"
+5030 REM   ============================================================
+5040 C=OPENOUT(outfile$)
+5050 IF PTR#C<>0 PRINT PTR#C:PROCtrip_error
+5060 PRINT#C, 102, 47.5
+5070 IF PTR#C<>2 PRINT PTR#C:PROCtrip_error
+5080 PRINT#C, "hello, world"
+5090 IF PTR#C<>3 PRINT PTR#C:PROCtrip_error
+5100 CLOSE#C
+5110 C=OPENIN(outfile$)
+5120 IF PTR#C<>0 PRINT PTR#C:PROCtrip_error
+5130 DIM A$(10)
+5140 INPUT#C, n%
+5150 IF PTR#C<>1 PRINT PTR#C:PROCtrip_error
+5160 INPUT#C, n, A$(2)
+5170 IF PTR#C<>3 PRINT PTR#C:PROCtrip_error
+5180 IF n%<>102 PROCtrip_error
+5190 IF n<>47.5 PROCtrip_error
+5200 IF A$(2)<>"hello, world" PROCtrip_error
+5210 IF NOT EOF#(C) PROCtrip_error
+5220 PTR#C=1
+5230 n=99
+5240 INPUT#C, n
+5250 IF n<>47.5 PROCtrip_error
+5260 PTR#C=0
+5270 n%=99
+5280 INPUT#C, n%
+5290 IF n%<>102 PROCtrip_error
+5300 CLOSE#C
+5310 ENDPROC
+
+1000000 DEF PROCtrip_error
+1000010 REM ==============================================================
+1000020 REM Deliberate division by zero to fail a test
+1000030 REM ==============================================================
+1000040 PRINT "Test failed!"
+1000050 PRINT 4/0
+1000060 ENDPROC
