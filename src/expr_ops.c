@@ -17,11 +17,17 @@
 
 /* Functions and types for operator expressions */
 
+#include "internal.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <math.h>
 #include <errno.h>
+
+#if HAVE_FENV_H
+#include <fenv.h>
+#endif
 
 #include "expr_internal.h"
 #include "runtime.h"
@@ -231,6 +237,7 @@ expr_eval_op_binary_arith(struct expr * e) {
     }
 
     struct value * result = NULL;
+    int status;
 
     if ( value_is_string(l) && value_is_string(r) && e->type == EXPR_OP_ADD ) {
         /* Perform string concatenation */
@@ -279,9 +286,14 @@ expr_eval_op_binary_arith(struct expr * e) {
                 break;
 
             case EXPR_OP_EXP:
+                if ( (status = feclearexcept(FE_INVALID | FE_DIVBYZERO)) != 0 ) {
+                    ABORTF("feclearexcept failed with status %d", status);
+                }
+
                 errno = 0;
                 const double d = pow(left, right);
-                if ( (errno == EDOM) || (errno == ERANGE) ) {
+                if ( (errno == EDOM) || (errno == ERANGE) || isnan(d)
+                        || isinf(d) || fetestexcept(FE_INVALID | FE_DIVBYZERO) ) {
                     error_set(ERR_LOG_RANGE);
                     break;
                 } else {
@@ -357,9 +369,14 @@ expr_eval_op_binary_arith(struct expr * e) {
                 break;
 
             case EXPR_OP_EXP:
+                if ( (status = feclearexcept(FE_INVALID | FE_DIVBYZERO)) != 0 ) {
+                    ABORTF("feclearexcept failed with status %d", status);
+                }
+
                 errno = 0;
                 const double d = pow(left, right);
-                if ( (errno == EDOM) || (errno == ERANGE) ) {
+                if ( (errno == EDOM) || (errno == ERANGE) || isnan(d)
+                        || isinf(d) || fetestexcept(FE_INVALID | FE_DIVBYZERO) ) {
                     error_set(ERR_LOG_RANGE);
                     break;
                 } else {

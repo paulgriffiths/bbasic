@@ -596,9 +596,14 @@ expr_eval_func_acs(struct expr * e) {
         return NULL;
     }
 
+    int status;
+    if ( (status = feclearexcept(FE_INVALID)) != 0 ) {
+        ABORTF("feclearexcept failed with status %d", status);
+    }
+
     errno = 0;
     const double d = acos(value_float(v));
-    if ( errno == EDOM ) {
+    if ( errno == EDOM || isnan(d) || fetestexcept(FE_INVALID) ) {
         value_free(v);
         error_set(ERR_NEGATIVE_ROOT);
         return NULL;
@@ -644,9 +649,14 @@ expr_eval_func_asn(struct expr * e) {
         return NULL;
     }
 
+    int status;
+    if ( (status = feclearexcept(FE_INVALID)) != 0 ) {
+        ABORTF("feclearexcept failed with status %d", status);
+    }
+
     errno = 0;
     const double d = asin(value_float(v));
-    if ( errno == EDOM ) {
+    if ( errno == EDOM || isnan(d) || fetestexcept(FE_INVALID) ) {
         value_free(v);
         error_set(ERR_NEGATIVE_ROOT);
         return NULL;
@@ -745,9 +755,14 @@ expr_eval_func_cos(struct expr * e) {
         return NULL;
     }
 
+    int status;
+    if ( (status = feclearexcept(FE_INVALID)) != 0 ) {
+        ABORTF("feclearexcept failed with status %d", status);
+    }
+
     errno = 0;
     const double d = cos(value_float(v));
-    if ( errno == EDOM ) {
+    if ( errno == EDOM || isnan(d) || fetestexcept(FE_INVALID) ) {
         value_free(v);
         error_set(ERR_NEGATIVE_ROOT);
         return NULL;
@@ -866,7 +881,7 @@ expr_eval_func_exp(struct expr * e) {
 
     errno = 0;
     const double d = exp(value_float(v));
-    if ( errno == ERANGE ) {
+    if ( errno == ERANGE || isinf(d) ) {
         value_free(v);
         error_set(ERR_NEGATIVE_ROOT);
         return NULL;
@@ -1142,9 +1157,15 @@ expr_eval_func_ln(struct expr * e) {
         return NULL;
     }
 
+    int status;
+    if ( (status = feclearexcept(FE_INVALID | FE_DIVBYZERO)) != 0 ) {
+        ABORTF("feclearexcept failed with status %d", status);
+    }
+
     errno = 0;
     const double d = log(value_float(v));
-    if ( (errno == EDOM) || (errno == ERANGE) ) {
+    if ( (errno == EDOM) || (errno == ERANGE) || isnan(d)
+            || isinf(d) || fetestexcept(FE_INVALID | FE_DIVBYZERO) ) {
         value_free(v);
         error_set(ERR_LOG_RANGE);
         return NULL;
@@ -1169,9 +1190,15 @@ expr_eval_func_log(struct expr * e) {
         return NULL;
     }
 
+    int status;
+    if ( (status = feclearexcept(FE_INVALID | FE_DIVBYZERO)) != 0 ) {
+        ABORTF("feclearexcept failed with status %d", status);
+    }
+
     errno = 0;
     const double d = log10(value_float(v));
-    if ( (errno == EDOM) || (errno == ERANGE) ) {
+    if ( (errno == EDOM) || (errno == ERANGE) || isnan(d)
+            || isinf(d) || fetestexcept(FE_INVALID | FE_DIVBYZERO) ) {
         value_free(v);
         error_set(ERR_LOG_RANGE);
         return NULL;
@@ -1523,9 +1550,14 @@ expr_eval_func_sin(struct expr * e) {
         return NULL;
     }
 
+    int status;
+    if ( (status = feclearexcept(FE_INVALID)) != 0 ) {
+        ABORTF("feclearexcept failed with status %d", status);
+    }
+
     errno = 0;
     const double d = sin(value_float(v));
-    if ( errno == EDOM ) {
+    if ( errno == EDOM || isnan(d) || fetestexcept(FE_INVALID) ) {
         value_free(v);
         error_set(ERR_NEGATIVE_ROOT);
         return NULL;
@@ -1578,7 +1610,7 @@ expr_eval_func_sqr(struct expr * e) {
 
     errno = 0;
     const double d = sqrt(value_float(v));
-    if ( errno == EDOM ) {
+    if ( errno == EDOM || isnan(d) ) {
         value_free(v);
         error_set(ERR_NEGATIVE_ROOT);
         return NULL;
@@ -1699,13 +1731,13 @@ expr_eval_func_tan(struct expr * e) {
     }
 
     int status;
-    if ( (status = feclearexcept(FE_OVERFLOW)) != 0 ) {
+    if ( (status = feclearexcept(FE_INVALID)) != 0 ) {
         ABORTF("feclearexcept failed with status %d", status);
     }
 
     errno = 0;
     const double d = tan(value_float(v));
-    if ( (errno == EDOM) || fetestexcept(FE_OVERFLOW) ) {
+    if ( (errno == EDOM) || isnan(d) || fetestexcept(FE_INVALID) ) {
         error_set(ERR_NEGATIVE_ROOT);
         value_free(v);
         return NULL;
