@@ -23,7 +23,7 @@ bbasic_LDADD = ../pgcommon/libpgcommon.a
 
 EXTRA_DIST = arith_test.basic array_test.basic branch_test.basic error_test.basic files_test.basic strings_test.basic test_in.file
 
-check_SCRIPTS = arith_test.sh array_test.sh branch_test.sh rt_errors_test.sh strings_test.sh
+check_SCRIPTS = arith_test.sh array_test.sh branch_test.sh error_test.sh strings_test.sh
 TESTS = $(check_SCRIPTS)
 
 array_test.sh:
@@ -41,14 +41,14 @@ branch_test.sh:
 	echo "./bbasic ${srcdir}/branch_test.basic" >> branch_test.sh
 	chmod +x branch_test.sh
 
-rt_errors_test.sh:
-	echo 'set -e' > rt_errors_test.sh
-	echo "./bbasic ${srcdir}/error_test.basic" >> rt_errors_test.sh
-	chmod +x rt_errors_test.sh
+error_test.sh:
+	echo 'set -e' > error_test.sh
+	echo "./bbasic ${srcdir}/error_test.basic" >> error_test.sh
+	chmod +x error_test.sh
 
 strings_test.sh:
 	echo 'set -e' > strings_test.sh
 	echo "./bbasic ${srcdir}/strings_test.basic" >> strings_test.sh
 	chmod +x strings_test.sh
 
-CLEANFILES = arith_test.sh array_test.sh branch_test.sh rt_errors_test.sh strings_test.sh test_out.file
+CLEANFILES = arith_test.sh array_test.sh branch_test.sh error_test.sh strings_test.sh test_out.file

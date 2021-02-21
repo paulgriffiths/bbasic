@@ -1,5 +1,7 @@
 # BBasic
 
+[![Build Status](https://github.com/paulgriffiths/bbasic/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/paulgriffiths/bbasic/actions/workflows/c-cpp.yml)
+
 An interpreter for a subset of BBC Basic II, as originally implemented for
 the BBC Model B Microcomputer.
 

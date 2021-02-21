@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## [0.9.1] - 2021-02-21
+### Added
+- Github Actions build workflow.
+
+### Fixed
+- macos build and test errors.
+
 ## [0.9.0] - 2021-02-18
 ### Added
 - Initial beta release.
