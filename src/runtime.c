@@ -93,7 +93,7 @@ static bool status_error(const int status);
 volatile sig_atomic_t interrupt;
 
 /* Builds a list of program statements from a list of program lines */
-static int
+static void
 build_statements(void) {
     struct line * line = lines;
     struct statement * tail = NULL;
@@ -122,6 +122,10 @@ build_statements(void) {
                 case STATEMENT_DEF_FN:
                 case STATEMENT_DEF_PROC:
                     symbol_proc_define(value_string_peek(stmt->v), stmt);
+                    break;
+
+                default:
+                    /* No specific processing */
                     break;
             }
 
@@ -405,6 +409,8 @@ open_file_set_ptr(const int fd, const int ptr) {
     }
 
     node->ptr = ptr;
+
+    return STATUS_OK;
 }
 
 

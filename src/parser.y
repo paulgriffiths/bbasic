@@ -484,4 +484,6 @@ int yyerror(char * fmt, ...) {
     va_end(ap);
 
     fputc('\n', stderr);
+
+    return 0;
 }

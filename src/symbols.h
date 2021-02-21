@@ -41,7 +41,7 @@ void symbol_table_pop_frame(void);
 void symbol_table_push_frame(void);
 
 /* Procedure functions */
-enum basic_error pass_arguments(struct expr * params, struct expr * args);
+int pass_arguments(struct expr * params, struct expr * args);
 struct statement * symbol_proc_call(const char * id);
 int symbol_proc_define(const char * id, struct statement * stmt);
 

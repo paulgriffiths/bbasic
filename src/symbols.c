@@ -17,8 +17,6 @@
 
 /* A symbol table */
 
-#define _POSIX_C_SOURCE 200809L
-
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
@@ -142,7 +140,7 @@ static long set_time_value;
  * variable with the same name as the item of the same index
  * in params.
  */
-enum basic_error
+int
 pass_arguments(struct expr * params, struct expr * args) {
     /* Assign procedure arguments to local variables */
     struct expr * param = params;
@@ -382,6 +380,9 @@ symbol_array_dimension(const char * id, struct value * v) {
             case SYMBOL_STRING:
                 s->u.s = x_strdup("");
                 break;
+
+            default:
+                ABORTF("unexpected symbol type: %d", type);
         }
 
         array->data[i] = s;
@@ -747,6 +748,10 @@ symbol_free(struct symbol * s) {
 
         case SYMBOL_STRING:
             free(s->u.s);
+            break;
+
+        default:
+            /* No specific processing */
             break;
     }
 
