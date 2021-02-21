@@ -19,14 +19,6 @@
 
 #include "internal.h"
 
-#ifdef HAVE_GETOPT_H
-#define _XOPEN_SOURCE
-#endif
-
-#ifdef HAVE_GETOPT_LONG
-#define _GNU_SOURCE
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

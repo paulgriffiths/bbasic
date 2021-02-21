@@ -15,8 +15,6 @@
  *  along with this program; If not, see <https://www.gnu.org/licenses/>.
  */
 
-#define _XOPEN_SOURCE 500
-
 #include "internal.h"
 
 #include <stdio.h>

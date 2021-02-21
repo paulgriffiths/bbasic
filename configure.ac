@@ -74,6 +74,40 @@ AC_CHECK_FUNCS([atexit clock_gettime memmove memset strdup strerror strtol strst
 
 AX_COMPILER_FLAGS
 
+OS=`uname -s`
+AC_MSG_CHECKING([OS])
+case "$OS" in
+        FreeBSD*)
+                AC_MSG_RESULT(FreeBSD)
+                OS_FREEBSD="true"
+                AM_CPPFLAGS="${AM_CPPFLAGS} -I/usr/local/include"
+                AM_LDFLAGS="${AM_LDFLAGS} -L/usr/local/lib"
+        ;;
+        Darwin*)
+                AC_MSG_RESULT(Darwin)
+                OS_DARWIN="true"
+                AC_DEFINE(_POSIX_C_SOURCE, [1], [Enable POSIX C source feature test macro])
+                AC_DEFINE(_DARWIN_C_SOURCE, [1], [Enable full C features on OSX])
+                AM_CPPFLAGS="${AM_CPPFLAGS} -I/usr/local/include -I/opt/local/include"
+                AM_LDFLAGS="${AM_LDFLAGS} -L/usr/local/lib -L/opt/local/lib"
+                AC_CHECK_LIB(iconv, libiconv_open, LIBS="$LIBS -liconv")
+        ;;
+        Linux*)
+                AC_MSG_RESULT(Linux)
+                AC_CHECK_LIB([dl], [dlopen], [])
+                AC_DEFINE(_GNU_SOURCE, [1], [Enable GNU C source feature test macro])
+                AC_CHECK_LIB(rt, clock_gettime, LIBS="$LIBS -lrt")
+                OS_LINUX="true"
+        ;;
+        *)
+                AC_MSG_RESULT(no)
+                AC_DEFINE(_POSIX_C_SOURCE, [1], [Enable POSIX C source feature test macro])
+        ;;
+esac
+AM_CONDITIONAL([FREEBSD], [test "$OS_FREEBSD" = "true"])
+AM_CONDITIONAL([DARWIN], [test "$OS_DARWIN" = "true"])
+AM_CONDITIONAL([LINUX], [test "$OS_LINUX" = "true"])
+
 AC_CONFIG_FILES([Makefile
                  pgcommon/Makefile
                  samples/Makefile
